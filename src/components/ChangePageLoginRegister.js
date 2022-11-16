@@ -2,10 +2,10 @@ import React from 'react'
 import styled from 'styled-components'
 import {Link} from 'react-router-dom'
 
-function ChangePageLoginRegister({children}) {
+function ChangePageLoginRegister({children, to}) {
   return (
     <ChangePage>
-      <Link to={'/sign-in'}>{children}</Link>
+      <Link to={to}>{children}</Link>
       
     </ChangePage>
   )

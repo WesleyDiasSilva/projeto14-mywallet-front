@@ -17,8 +17,8 @@ function RegisterPage() {
         <Input placeholder='Confirm Password'/>
         <LongButton content={'Register'}/>
       </ContainerInputs>
-      <ChangePageLoginRegister>
-        Do you have a account? Get in now!
+      <ChangePageLoginRegister to={'/sign-in'}>
+        Have you already a account? Get in now!
       </ChangePageLoginRegister>
     </Background>
   )
