@@ -17,10 +17,11 @@ function MainPage() {
           Não há registros de entrada ou saída
         </TransactionsContainer>
         <ActionsContainer>
-        <ShortButton icon={addTransaction} text="New Revenue" />
+        <ShortButton icon={addTransaction} text="New Revenue" link='/newRevenue'/>
         <ShortButton
           icon={removeTransactions}
           text="New Expense"
+          link='/newExpense'
         />
         </ActionsContainer>
       </Container>

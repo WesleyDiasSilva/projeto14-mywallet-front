@@ -1,19 +1,22 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-function ShortButton({text, icon}) {
+function ShortButton({ text, icon, link }) {
   return (
-    <Button>
-      <Icon src={icon}/>
-      <Label>{text}</Label>
-    </Button>
-  )
+    <Link to={link}>
+      <Button>
+        <Icon src={icon} />
+        <Label>{text}</Label>
+      </Button>
+    </Link>
+  );
 }
 
-export default ShortButton
+export default ShortButton;
 
 const Button = styled.button`
-  background-color: #A328D6;
+  background-color: #a328d6;
   width: 156px;
   height: 114px;
   margin-top: 20px;
@@ -30,16 +33,12 @@ const Button = styled.button`
   align-items: flex-start;
   padding: 10px;
   box-sizing: border-box;
-  &:hover{
+  &:hover {
     background-color: #b235e6;
-    transition: .5s;
+    transition: 0.5s;
   }
-`
+`;
 
-const Icon = styled.img`
+const Icon = styled.img``;
 
-`
-
-const Label = styled.span`
-
-`
+const Label = styled.span``;

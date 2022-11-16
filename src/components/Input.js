@@ -11,6 +11,7 @@ const InputModel = styled.input`
   width: 100%;
   height: 58px;
   border-radius: 5px;
+  box-sizing: border-box;
   border: none;
   padding-left: 15px;
   color: #000;
