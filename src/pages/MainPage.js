@@ -8,11 +8,13 @@ import Transaction from "../components/Transaction";
 import axios from "axios";
 import { API } from "../API.js";
 import { UserContext } from "../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function MainPage() {
 
   const [transactions, setTransactions] = React.useState([])
   const userContext = useContext(UserContext)
+  const navigate = useNavigate()
 
   useEffect(()=> {
     const token = JSON.parse(localStorage.getItem("token")).token;
@@ -35,12 +37,18 @@ function MainPage() {
     }
   })
 
+  function logoutUser(){
+    localStorage.removeItem("token");
+    userContext.setUser({});
+    navigate("/sign-in")
+  }
+
   return (
     <Background>
       <Container>
         <Header>
           <NameUser>Hello {userContext.user.name}!</NameUser>
-          <Logout src={logout} />
+          <Logout onClick={logoutUser} src={logout} />
         </Header>
         <TransactionsContainer type={transactions?.length}>
           {transactions.length > 0
@@ -133,6 +141,7 @@ const Header = styled.header`
 const Logout = styled.img`
   width: 24px;
   height: 24px;
+  cursor: pointer;
 `;
 
 const TransactionsContainer = styled.div`
