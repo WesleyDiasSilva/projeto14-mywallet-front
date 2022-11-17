@@ -1,18 +1,33 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Input from "../components/Input";
 import LongButton from "../components/LongButton";
+import axios from "axios";
+import {API} from '../API.js'
 
 function ExpensePage() {
+
+  const navigate = useNavigate();
+  const [value, setValue] = React.useState("");
+  const [description, setDescription] = React.useState("");
+
+  function registerNewExpense(){
+    const token = JSON.parse(localStorage.getItem("token")).token
+    const promise = axios.post(API+"/transaction",{value, description, type: "expense"}, {headers:{authorization: token}});
+    promise.then(() => navigate("/mywallet"));
+    promise.catch(err => console.log(err));
+  }
+
   return (
     <Background>
       <Container>
         <Header>
           <NameUser>New Expense</NameUser>
         </Header>
-        <Input placeholder='Value'/>
-        <Input placeholder='Description'/>
-        <LongButton content='Add Expense'/>
+        <Input setValue={setValue} value={value} placeholder='Value'/>
+        <Input setValue={setDescription} value={description} placeholder='Description'/>
+        <LongButton onClick={registerNewExpense} content='Add Expense'/>
       </Container>
     </Background>
   );

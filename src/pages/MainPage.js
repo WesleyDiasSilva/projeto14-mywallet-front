@@ -1,45 +1,54 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components";
 import logout from "../assets/img/Vector.svg";
 import ShortButton from "../components/ShortButton";
 import addTransaction from "../assets/img/ant-design_plus-circle-outlined.svg";
 import removeTransactions from "../assets/img/ant-design_minus-circle-outlined.svg";
 import Transaction from "../components/Transaction";
+import axios from "axios";
+import { API } from "../API.js";
+import { UserContext } from "../contexts/UserContext";
 
 function MainPage() {
 
-  const data = [
-    { date: "15/11", description: "Salário", type: "revenue", value: 3000 },
-    {
-      date: "20/11",
-      description: "Empréstimo Maria",
-      type: "revenue",
-      value: 500,
-    },
-    {
-      date: "26/11",
-      description: "Compras Churrasco",
-      type: "expense",
-      value: 67.6,
-    },
-    { date: "27/11", description: "Mercado", type: "expense", value: 542.54 },
-    { date: "30/11", description: "Almoço mãe", type: "expense", value: 39.9 },
-  ];
+  const [transactions, setTransactions] = React.useState([])
+  const userContext = useContext(UserContext)
+
+  useEffect(()=> {
+    const token = JSON.parse(localStorage.getItem("token")).token;
+    const promise = axios.get(API+"/transaction",{headers: {authorization: token}})
+    promise.then(res => {
+      setTransactions(res.data)
+    });
+    
+    promise.catch(err => console.log(err));
+  }, [userContext])
+
+  let balance = 0;
+  transactions.forEach((transaction) => {
+    if(transaction.type === "revenue"){
+      balance += Number(transaction.value)
+      return;
+    }
+    if(transaction.type === "expense"){
+      balance -= Number(transaction.value)
+    }
+  })
 
   return (
     <Background>
       <Container>
         <Header>
-          <NameUser>Hello Dear!</NameUser>
+          <NameUser>Hello {userContext.user.name}!</NameUser>
           <Logout src={logout} />
         </Header>
-        <TransactionsContainer type={data?.length}>
-          {data.length > 0
-            ? data.map((t) => <Transaction key={t.value} transaction={t} />)
+        <TransactionsContainer type={transactions?.length}>
+          {transactions.length > 0
+            ? transactions.map((t) => <Transaction key={t.value} transaction={t} />)
             : "Não há registros de entrada ou saída"}
-            {data.length > 0 ? <BalanceContainer>
+            {transactions.length > 0 ? <BalanceContainer>
             <BalanceTitle>Balance</BalanceTitle>
-            <BalanceValue value={2849.96}>2849,96</BalanceValue>
+            <BalanceValue value={balance}>{balance}</BalanceValue>
           </BalanceContainer> : ""}
           
         </TransactionsContainer>
@@ -106,7 +115,7 @@ const BalanceTitle = styled.span`
 `;
 
 const BalanceValue = styled.span`
-  color: ${(props) => props.value > 0 ? "#03AC00" : "#C70000"};
+  color: ${(props) => props.value > 0 ? "#03AC00" : props.value < 0 ? "#C70000" : "#000"};
   font-family: Raleway;
   font-size: 17px;
   font-weight: bold;
@@ -132,7 +141,7 @@ const TransactionsContainer = styled.div`
   background-color: #fff;
   border-radius: 5px;
   display: flex;
-  justify-content: ${props => props.type > 1 ? "start" : "center"};
+  justify-content: ${props => props.type > 0 ? "start" : "center"};
   align-items: center;
   font: Raleway;
   color: #868686;

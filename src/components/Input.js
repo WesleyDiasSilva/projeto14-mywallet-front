@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-function Input({placeholder}) {
-  return <InputModel placeholder={placeholder}/>   
+function Input({placeholder, setValue, value, type="text"}) {
+  return <InputModel type={type} onChange={({target}) => setValue(target.value)} value={value} placeholder={placeholder}/>   
 }
 
 export default Input

@@ -1,9 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
 
-function LongButton({content}) {
+function LongButton({content, onClick}) {
   return (
-    <Button>
+    <Button onClick={onClick}>
       {content}
     </Button>
   )
