@@ -9,39 +9,44 @@ import axios from "axios";
 import { API } from "../API.js";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
+import arrowNext from "../assets/img/arrow-right.svg";
+import arrowPrevius from "../assets/img/arrow-left.svg";
 
 function MainPage() {
+  const [transactions, setTransactions] = React.useState([]);
+  const userContext = useContext(UserContext);
+  const navigate = useNavigate();
 
-  const [transactions, setTransactions] = React.useState([])
-  const userContext = useContext(UserContext)
-  const navigate = useNavigate()
 
-  useEffect(()=> {
+  useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token")).token;
-    const promise = axios.get(API+"/transaction",{headers: {authorization: token}})
-    promise.then(res => {
-      setTransactions(res.data)
+    const promise = axios.get(API + "/transaction", {
+      headers: { authorization: token },
     });
-    
-    promise.catch(err => console.log(err));
-  }, [userContext])
+    promise.then((res) => {
+      setTransactions(res.data.reverse());
+    });
+
+    promise.catch((err) => console.log(err));
+  }, []);
 
   let balance = 0;
   transactions.forEach((transaction) => {
-    if(transaction.type === "revenue"){
-      balance += Number(transaction.value)
+    if (transaction.type === "revenue") {
+      balance += Number(transaction.value);
       return;
     }
-    if(transaction.type === "expense"){
-      balance -= Number(transaction.value)
+    if (transaction.type === "expense") {
+      balance -= Number(transaction.value);
     }
-  })
+  });
 
-  function logoutUser(){
+  function logoutUser() {
     localStorage.removeItem("token");
     userContext.setUser({});
-    navigate("/sign-in")
+    navigate("/sign-in");
   }
+
 
   return (
     <Background>
@@ -52,14 +57,19 @@ function MainPage() {
         </Header>
         <TransactionsContainer type={transactions?.length}>
           {transactions.length > 0
-            ? transactions.map((t) => <Transaction key={t.value} transaction={t} />)
+            ? transactions.reverse()
+                .map((t) => <Transaction key={t.value} transaction={t} />)
             : "Não há registros de entrada ou saída"}
-            {transactions.length > 0 ? <BalanceContainer>
-            <BalanceTitle>Balance</BalanceTitle>
-            <BalanceValue value={balance}>{balance}</BalanceValue>
-          </BalanceContainer> : ""}
           
         </TransactionsContainer>
+        {transactions.length > 0 ? (
+            <BalanceContainer>
+              <BalanceTitle>Balance</BalanceTitle>
+              <BalanceValue value={balance}>{balance}</BalanceValue>
+            </BalanceContainer>
+          ) : (
+            ""
+          )}
         <ActionsContainer>
           <ShortButton
             icon={addTransaction}
@@ -96,6 +106,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  position: absolute;
 `;
 
 const NameUser = styled.span`
@@ -105,14 +116,15 @@ const NameUser = styled.span`
 `;
 
 const BalanceContainer = styled.div`
-  width: calc(100% - 30px);
-  height: 40px;
-  position: absolute;
-  bottom: 10px;
-  left: 15px;
+  width: 100%;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: #fff;
+  border-radius: 0px 0px 5px 5px;
+  padding: 10px;
+  box-sizing: border-box;
 `;
 
 const BalanceTitle = styled.span`
@@ -123,7 +135,8 @@ const BalanceTitle = styled.span`
 `;
 
 const BalanceValue = styled.span`
-  color: ${(props) => props.value > 0 ? "#03AC00" : props.value < 0 ? "#C70000" : "#000"};
+  color: ${(props) =>
+    props.value > 0 ? "#03AC00" : props.value < 0 ? "#C70000" : "#000"};
   font-family: Raleway;
   font-size: 17px;
   font-weight: bold;
@@ -135,7 +148,7 @@ const Header = styled.header`
   align-items: center;
   width: 100%;
   color: #fff;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 `;
 
 const Logout = styled.img`
@@ -145,12 +158,13 @@ const Logout = styled.img`
 `;
 
 const TransactionsContainer = styled.div`
-  height: 446px;
+  height: 350px;
   width: 100%;
   background-color: #fff;
-  border-radius: 5px;
+  overflow-y: scroll;
+  border-radius: 5px 0px 0px 0px;
   display: flex;
-  justify-content: ${props => props.type > 0 ? "start" : "center"};
+  justify-content: ${(props) => (props.type > 0 ? "start" : "center")};
   align-items: center;
   font: Raleway;
   color: #868686;
