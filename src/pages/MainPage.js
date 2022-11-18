@@ -20,7 +20,7 @@ function MainPage() {
     React.useState("");
 
   useEffect(() => {
-    const token = JSON.parse(localStorage.getItem("token")).token;
+    const { token, name } = JSON.parse(localStorage.getItem("token"));
     const promise = axios.get(API + "/transaction", {
       headers: { authorization: token },
     });
@@ -29,6 +29,9 @@ function MainPage() {
     });
 
     promise.catch((err) => console.log(err));
+    if (!userContext.name) {
+      userContext.setUser({ name, token });
+    }
   }, [modal]);
 
   let balance = 0;

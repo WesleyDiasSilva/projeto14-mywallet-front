@@ -1,14 +1,17 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import AppTitle from "../components/AppTitle";
 import GetStarted from "../components/GetStarted";
-import ShortButton from "../components/ShortButton";
 
 function HomePage() {
+  const navigate = useNavigate();
+  function redirectSignIn() {
+    navigate("/sign-in");
+  }
   return (
     <Background>
-      <SignInButton>Sign-In</SignInButton>
-
+      <SignInButton onClick={redirectSignIn}>Sign-In</SignInButton>
       <AppTitle />
       <DescriptionApp>
         My wallet is an app for to manage your finance, register revenues and

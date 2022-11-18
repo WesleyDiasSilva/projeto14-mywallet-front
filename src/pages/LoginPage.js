@@ -20,8 +20,12 @@ function LoginPage() {
   function login() {
     const result = axios.post(API + "/sign-in", { email, password });
     result.then((res) => {
+      console.log(res);
       userContext.setUser({ name: res.data.user, token: res.data.token });
-      localStorage.setItem("token", JSON.stringify({ token: res.data.token }));
+      localStorage.setItem(
+        "token",
+        JSON.stringify({ token: res.data.token, name: res.data.user })
+      );
       setEmail("");
       setPassword("");
       navigate("/mywallet");

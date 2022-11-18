@@ -1,22 +1,29 @@
 import axios from "axios";
 import React, { useContext } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { API } from "../API.js";
 import { UserContext } from "../contexts/UserContext";
 
-function Modal({ valueTransactionDelete, setModal, setUpdateTransactions, updateTransactions }) {
+function Modal({
+  valueTransactionDelete,
+  setModal,
+  setUpdateTransactions,
+  updateTransactions,
+}) {
   const { description, date, value, _id } = valueTransactionDelete;
   function closeModal() {
     setModal(false);
     // setUpdateTransactions(!updateTransactions)
   }
 
-  const userContext = useContext(UserContext)
+  const userContext = useContext(UserContext);
   const token = userContext.user.token;
-  function deleteTransaction(id){
-    const promise = axios.delete(`${API}/transaction/${id}`, {headers: {authorization: token}});
+  function deleteTransaction(id) {
+    const promise = axios.delete(`${API}/transaction/${id}`, {
+      headers: { authorization: token },
+    });
     promise.then(() => closeModal());
-    promise.catch(err => console.log(err))
+    promise.catch((err) => console.log(err));
   }
 
   return (
@@ -29,7 +36,9 @@ function Modal({ valueTransactionDelete, setModal, setUpdateTransactions, update
           <LabelTransaction>Value: {value}</LabelTransaction>
         </ContainerInformationTransaction>
         <ContainerButtons>
-          <Button onClick={() => deleteTransaction(_id)} type="delete">Delete</Button>
+          <Button onClick={() => deleteTransaction(_id)} type="delete">
+            Delete
+          </Button>
           <Button onClick={closeModal}>Cancel</Button>
         </ContainerButtons>
         <CloseModal onClick={closeModal}>X</CloseModal>
@@ -50,6 +59,21 @@ const ModalContainer = styled.div`
   align-items: center;
 `;
 
+const AnimaEntry = keyframes`
+
+  0%{
+    right: 500px;
+    transform: initial;
+    opacity: 0;
+  }
+
+  10%{
+    right: 0px;
+    transform: initial;
+    opacity: 1;
+  }
+`;
+
 const ModalContent = styled.div`
   background-color: #fff;
   width: 50%;
@@ -61,6 +85,7 @@ const ModalContent = styled.div`
   align-items: center;
   flex-direction: column;
   position: relative;
+  animation: ${AnimaEntry} 5s backwards;
 `;
 
 const TitleModal = styled.h3`
@@ -124,8 +149,8 @@ const CloseModal = styled.button`
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  &:hover{
+  &:hover {
     background-color: #ab2cde;
     transition: 0.3s;
   }
-`
+`;
