@@ -1,22 +1,48 @@
 import React from 'react'
 import styled from 'styled-components'
 
-function Transaction({transaction}) {
+function Transaction({transaction, setModal, setValueTransactionDelete}) {
+  function openModal(){
+    setModal(true);
+    setValueTransactionDelete(transaction);
+  }
+
+  function closeModal(){
+    setModal(false);
+  }
+
   return (
     <ContainerTransaction>
       <ContainerDateAndDescription>
         <DateTransaction>{transaction.date}</DateTransaction>
         <DescriptionTransaction>{transaction.description}</DescriptionTransaction>
       </ContainerDateAndDescription>
-      <TransactionValue type={transaction.type}>
-        {transaction.value}
-      </TransactionValue>
+      <ContainerValueAndRemove>
+        <TransactionValue type={transaction.type}>
+          {transaction.value}
+        </TransactionValue>
+      <RemoveTransaction onClick={openModal}>X</RemoveTransaction>
+      </ContainerValueAndRemove>
     </ContainerTransaction>
   )
 }
 
 export default Transaction
 
+const RemoveTransaction = styled.span`
+  font-family: Raleway;
+  font-size: 17px;
+  &:hover{
+    color: #C70000;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+`
+
+const ContainerValueAndRemove = styled.div`
+  display: flex;
+  gap: 10px;
+`
 
 const ContainerTransaction = styled.div`
   width: 100%;

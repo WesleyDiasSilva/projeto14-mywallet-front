@@ -9,14 +9,15 @@ import axios from "axios";
 import { API } from "../API.js";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import arrowNext from "../assets/img/arrow-right.svg";
-import arrowPrevius from "../assets/img/arrow-left.svg";
+import Modal from "../components/Modal";
 
 function MainPage() {
   const [transactions, setTransactions] = React.useState([]);
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
-
+  const [modal, setModal] = React.useState(false);
+  const [valueTransactionDelete, setValueTransactionDelete] =
+    React.useState("");
 
   useEffect(() => {
     const token = JSON.parse(localStorage.getItem("token")).token;
@@ -47,9 +48,14 @@ function MainPage() {
     navigate("/sign-in");
   }
 
-
   return (
     <Background>
+      {modal && (
+        <Modal
+          setModal={setModal}
+          valueTransactionDelete={valueTransactionDelete}
+        />
+      )}
       <Container>
         <Header>
           <NameUser>Hello {userContext.user.name}!</NameUser>
@@ -57,19 +63,26 @@ function MainPage() {
         </Header>
         <TransactionsContainer type={transactions?.length}>
           {transactions.length > 0
-            ? transactions.reverse()
-                .map((t) => <Transaction key={t.value} transaction={t} />)
+            ? transactions
+                .reverse()
+                .map((t) => (
+                  <Transaction
+                    setValueTransactionDelete={setValueTransactionDelete}
+                    setModal={setModal}
+                    key={t.value}
+                    transaction={t}
+                  />
+                ))
             : "Não há registros de entrada ou saída"}
-          
         </TransactionsContainer>
         {transactions.length > 0 ? (
-            <BalanceContainer>
-              <BalanceTitle>Balance</BalanceTitle>
-              <BalanceValue value={balance}>{balance}</BalanceValue>
-            </BalanceContainer>
-          ) : (
-            ""
-          )}
+          <BalanceContainer>
+            <BalanceTitle>Balance</BalanceTitle>
+            <BalanceValue value={balance}>{balance}</BalanceValue>
+          </BalanceContainer>
+        ) : (
+          ""
+        )}
         <ActionsContainer>
           <ShortButton
             icon={addTransaction}
