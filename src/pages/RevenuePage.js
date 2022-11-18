@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { API } from "../API.js";
@@ -12,8 +12,16 @@ function RevenuePage() {
   const [value, setValue] = React.useState("");
   const [description, setDescription] = React.useState("");
 
+  const user = JSON.parse(localStorage.getItem("token"));
+  useEffect(() => {
+    if (!user) {
+      navigate("/sign-in");
+      return;
+    }
+  }, []);
+
+  const token = user?.token;
   function registerNewRevenue() {
-    const token = JSON.parse(localStorage.getItem("token")).token;
     const promise = axios.post(
       API + "/transaction",
       { value, description, type: "revenue" },

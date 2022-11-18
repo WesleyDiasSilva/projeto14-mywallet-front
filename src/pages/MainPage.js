@@ -24,10 +24,16 @@ function MainPage() {
     React.useState("");
 
   useEffect(() => {
-    const { token, name } = JSON.parse(localStorage.getItem("token"));
+    const user = JSON.parse(localStorage.getItem("token"));
+    if (!user) {
+      navigate("/sign-in");
+      return;
+    }
+    const { token, name } = user;
     const promise = axios.get(API + "/transaction", {
       headers: { authorization: token },
     });
+
     promise.then((res) => {
       setTransactions(res.data.reverse());
     });

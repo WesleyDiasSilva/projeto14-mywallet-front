@@ -1,20 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Input from "../components/Input";
 import LongButton from "../components/LongButton";
 import axios from "axios";
 import { API } from "../API.js";
-
 import ButtonBackPage from "../components/ButtonBackPage";
 
 function ExpensePage() {
   const navigate = useNavigate();
   const [value, setValue] = React.useState("");
   const [description, setDescription] = React.useState("");
-
+  const user = JSON.parse(localStorage.getItem("token"));
+  useEffect(() => {
+    if (!user) {
+      navigate("/sign-in");
+      return;
+    }
+  }, []);
+  const token = user?.token;
   function registerNewExpense() {
-    const token = JSON.parse(localStorage.getItem("token")).token;
     const promise = axios.post(
       API + "/transaction",
       { value, description, type: "expense" },
