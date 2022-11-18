@@ -4,7 +4,7 @@ import styled, { keyframes } from "styled-components";
 import { API } from "../API.js";
 import { UserContext } from "../contexts/UserContext";
 
-function Modal({
+function ModalDelete({
   valueTransactionDelete,
   setModal,
   setUpdateTransactions,
@@ -13,7 +13,6 @@ function Modal({
   const { description, date, value, _id } = valueTransactionDelete;
   function closeModal() {
     setModal(false);
-    // setUpdateTransactions(!updateTransactions)
   }
 
   const userContext = useContext(UserContext);
@@ -47,7 +46,7 @@ function Modal({
   );
 }
 
-export default Modal;
+export default ModalDelete;
 
 const ModalContainer = styled.div`
   background-color: rgba(0, 0, 0, 0.5);

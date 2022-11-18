@@ -1,21 +1,28 @@
 import React from "react";
 import styled from "styled-components";
 
-function Transaction({ transaction, setModal, setValueTransactionDelete }) {
+function Transaction({
+  transaction,
+  setModal,
+  setValueTransactionDelete,
+  setModalUpdate,
+  setValueTransactionUpdate,
+}) {
   function openModal() {
     setModal(true);
     setValueTransactionDelete(transaction);
   }
 
-  function updateTransaction(){
-    
+  function updateTransaction() {
+    setModalUpdate(true);
+    setValueTransactionUpdate(transaction);
   }
 
   return (
     <ContainerTransaction>
       <ContainerDateAndDescription>
         <DateTransaction>{transaction.date}</DateTransaction>
-        <DescriptionTransaction>
+        <DescriptionTransaction onClick={updateTransaction}>
           {transaction.description}
         </DescriptionTransaction>
       </ContainerDateAndDescription>
@@ -74,4 +81,5 @@ const DescriptionTransaction = styled.span`
   font-family: Raleway;
   font-size: 16px;
   color: #000;
+  cursor: pointer;
 `;

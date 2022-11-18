@@ -9,14 +9,18 @@ import axios from "axios";
 import { API } from "../API.js";
 import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
-import Modal from "../components/Modal";
+import ModalDelete from "../components/ModalDelete";
+import ModalUpdate from "../components/ModalUpdate";
 
 function MainPage() {
   const [transactions, setTransactions] = React.useState([]);
   const userContext = useContext(UserContext);
   const navigate = useNavigate();
   const [modal, setModal] = React.useState(false);
+  const [modalUpdate, setModalUpdate] = React.useState(false);
   const [valueTransactionDelete, setValueTransactionDelete] =
+    React.useState("");
+  const [valueTransactionUpdate, setValueTransactionUpdate] =
     React.useState("");
 
   useEffect(() => {
@@ -32,7 +36,7 @@ function MainPage() {
     if (!userContext.name) {
       userContext.setUser({ name, token });
     }
-  }, [modal]);
+  }, [modal, modalUpdate]);
 
   let balance = 0;
   transactions.forEach((transaction) => {
@@ -54,9 +58,15 @@ function MainPage() {
   return (
     <Background>
       {modal && (
-        <Modal
+        <ModalDelete
           setModal={setModal}
           valueTransactionDelete={valueTransactionDelete}
+        />
+      )}
+      {modalUpdate && (
+        <ModalUpdate
+          transaction={valueTransactionUpdate}
+          setModalUpdate={setModalUpdate}
         />
       )}
       <Container>
@@ -70,6 +80,8 @@ function MainPage() {
                 .reverse()
                 .map((t) => (
                   <Transaction
+                    setValueTransactionUpdate={setValueTransactionUpdate}
+                    setModalUpdate={setModalUpdate}
                     setValueTransactionDelete={setValueTransactionDelete}
                     setModal={setModal}
                     key={t._id}
