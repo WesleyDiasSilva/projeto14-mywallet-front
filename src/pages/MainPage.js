@@ -29,7 +29,7 @@ function MainPage() {
     });
 
     promise.catch((err) => console.log(err));
-  }, []);
+  }, [modal]);
 
   let balance = 0;
   transactions.forEach((transaction) => {
@@ -69,7 +69,7 @@ function MainPage() {
                   <Transaction
                     setValueTransactionDelete={setValueTransactionDelete}
                     setModal={setModal}
-                    key={t.value}
+                    key={t._id}
                     transaction={t}
                   />
                 ))

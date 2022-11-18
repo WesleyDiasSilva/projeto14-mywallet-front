@@ -1,55 +1,58 @@
-import axios from 'axios'
-import React, { useContext } from 'react'
-import styled from 'styled-components'
-import AppTitle from '../components/AppTitle'
-import ChangePageLoginRegister from '../components/ChangePageLoginRegister'
-import Input from '../components/Input'
-import LongButton from '../components/LongButton'
-import { API } from '../API.js'
-import { useNavigate } from 'react-router-dom'
-import { UserContext } from '../contexts/UserContext'
-
+import axios from "axios";
+import React, { useContext } from "react";
+import styled from "styled-components";
+import AppTitle from "../components/AppTitle";
+import ChangePageLoginRegister from "../components/ChangePageLoginRegister";
+import Input from "../components/Input";
+import LongButton from "../components/LongButton";
+import { API } from "../API.js";
+import { useNavigate } from "react-router-dom";
+import { UserContext } from "../contexts/UserContext";
 
 function LoginPage() {
-
   const userContext = useContext(UserContext);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [email, setEmail] = React.useState('')
-  const [password, setPassword] = React.useState('')
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
 
-  function login(){
-    const result = axios.post(API+"/sign-in", {email, password});
+  function login() {
+    const result = axios.post(API + "/sign-in", { email, password });
     result.then((res) => {
-      userContext.setUser({name: res.data.user, token: res.data.token})
-      localStorage.setItem("token", JSON.stringify({token: res.data.token}))
+      userContext.setUser({ name: res.data.user, token: res.data.token });
+      localStorage.setItem("token", JSON.stringify({ token: res.data.token }));
       setEmail("");
       setPassword("");
-      navigate("/mywallet")
+      navigate("/mywallet");
     });
-    result.catch((err) => console.log(err))
+    result.catch((err) => console.log(err));
   }
 
   return (
     <Background>
-     <AppTitle />
+      <AppTitle />
       <ContainerInputs>
-        <Input setValue={setEmail} value={email} placeholder='E-mail'/>
-        <Input type={"password"} setValue={setPassword} value={password} placeholder='Password'/>
-        <LongButton onClick={login} content={'Login'}/>
+        <Input setValue={setEmail} value={email} placeholder="E-mail" />
+        <Input
+          type={"password"}
+          setValue={setPassword}
+          value={password}
+          placeholder="Password"
+        />
+        <LongButton onClick={login} content={"Login"} />
       </ContainerInputs>
-      <ChangePageLoginRegister to={'/sign-up'}>
+      <ChangePageLoginRegister to={"/sign-up"}>
         First time? Register!
       </ChangePageLoginRegister>
     </Background>
-  )
+  );
 }
 
-export default LoginPage
+export default LoginPage;
 
 const Background = styled.div`
-  background-color: #8C11BE;
+  background-color: #8c11be;
   width: 100%;
   height: 100vh;
   display: flex;
@@ -57,11 +60,11 @@ const Background = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 30px;
-`
+`;
 
 const ContainerInputs = styled.div`
   width: 326px;
   display: flex;
   flex-direction: column;
   gap: 15px;
-`
+`;
