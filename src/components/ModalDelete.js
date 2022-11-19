@@ -28,7 +28,9 @@ function ModalDelete({
   return (
     <ModalContainer>
       <ModalContent>
-        <TitleModal>Do you want to delete this transaction?</TitleModal>
+        <ContainerTitle>
+          <TitleModal>Delete this transaction?</TitleModal>
+        </ContainerTitle>
         <ContainerInformationTransaction>
           <LabelTransaction>Date: {date}</LabelTransaction>
           <LabelTransaction>Description: {description}</LabelTransaction>
@@ -58,6 +60,12 @@ const ModalContainer = styled.div`
   align-items: center;
 `;
 
+const ContainerTitle = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const AnimaEntry = keyframes`
 
   0%{
@@ -75,8 +83,9 @@ const AnimaEntry = keyframes`
 
 const ModalContent = styled.div`
   background-color: #fff;
-  width: 50%;
-  height: 40%;
+  width: 60%;
+  height: 50%;
+  border-radius: 5px;
   z-index: 2;
   opacity: 1;
   display: flex;
@@ -87,7 +96,7 @@ const ModalContent = styled.div`
   animation: ${AnimaEntry} 5s backwards;
 `;
 
-const TitleModal = styled.h3`
+const TitleModal = styled.span`
   font-family: Raleway;
   font-size: 20px;
   font-weight: bold;
@@ -135,14 +144,14 @@ const Button = styled.button`
 `;
 
 const CloseModal = styled.button`
-  width: 50px;
-  height: 50px;
+  width: 35px;
+  height: 35px;
   background-color: #8c11be;
   border-radius: 50%;
   border: none;
   position: absolute;
-  top: -25px;
-  right: -25px;
+  top: -15px;
+  right: -15px;
   color: #fff;
   font-family: Raleway;
   font-size: 16px;

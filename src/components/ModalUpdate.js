@@ -4,21 +4,31 @@ import styled, { keyframes } from "styled-components";
 import { API } from "../API";
 import { UserContext } from "../contexts/UserContext";
 
-function ModalUpdate({ transaction, setModalUpdate }) {
-  const [value, setValue] = React.useState(transaction.value);
-  const [description, setDescription] = React.useState(transaction.description);
+function ModalUpdate({
+  transaction,
+  setModalUpdate,
+  type,
+  setTypeUpdate,
+  user,
+}) {
+  const [inputValue1, setInputValue1] = React.useState(
+    type === "user" ? user.name : transaction.value
+  );
+  const [inputValue2, setInputValue2] = React.useState(
+    type === "user" ? user.image : transaction.description
+  );
 
-  const { token } = useContext(UserContext).user;
-  console.log(token);
-
+  const userContext = useContext(UserContext);
+  const { token } = userContext.user;
   function closeModal() {
     setModalUpdate(false);
+    setTypeUpdate("");
   }
 
   function updateTransaction(id) {
     const promise = axios.put(
       `${API}/transaction/${id}`,
-      { value, description, type: transaction.type },
+      { value: inputValue1, description: inputValue2, type: transaction.type },
       { headers: { authorization: token } }
     );
 
@@ -32,27 +42,52 @@ function ModalUpdate({ transaction, setModalUpdate }) {
     });
   }
 
+  function updateUser() {
+    const promise = axios.put(
+      `${API}/user`,
+      { name: inputValue1, image: inputValue2 },
+      { headers: { authorization: token } }
+    );
+    promise.then(() => {
+      const user = JSON.parse(localStorage.getItem("token"));
+      user.name = inputValue1;
+      user.image = inputValue2;
+      localStorage.setItem("token", JSON.stringify(user));
+      closeModal();
+    });
+    promise.catch(() => {
+      closeModal();
+    });
+  }
+
+  function decideUpdate(transaction) {
+    if (type === "user") {
+      updateUser();
+    } else {
+      updateTransaction(transaction._id);
+    }
+  }
+
   return (
     <ModalContainer>
       <ModalContent>
-        <TitleModal>Update of Transaction</TitleModal>
+        <TitleModal>
+          {type === "user" ? "Profile Information" : "Update of Transaction"}
+        </TitleModal>
         <ContainerInformationTransaction>
           <Input
-            placeholder="Value"
-            onChange={({ target }) => setValue(target.value)}
-            value={value}
+            placeholder={type === "user" ? "Name" : "Value"}
+            onChange={({ target }) => setInputValue1(target.value)}
+            value={inputValue1}
           />
           <Input
-            placeholder="Description"
-            onChange={({ target }) => setDescription(target.value)}
-            value={description}
+            placeholder={type === "user" ? "Image" : "Description"}
+            onChange={({ target }) => setInputValue2(target.value)}
+            value={inputValue2}
           />
         </ContainerInformationTransaction>
         <ContainerButtons>
-          <Button
-            type="update"
-            onClick={() => updateTransaction(transaction._id)}
-          >
+          <Button type="update" onClick={() => decideUpdate(transaction)}>
             Update
           </Button>
           <Button onClick={closeModal}>Cancel</Button>
@@ -110,8 +145,9 @@ const AnimaEntry = keyframes`
 
 const ModalContent = styled.div`
   background-color: #fff;
-  width: 50%;
-  height: 40%;
+  width: 60%;
+  height: 50%;
+  border-radius: 5px;
   z-index: 2;
   opacity: 1;
   display: flex;
@@ -164,14 +200,14 @@ const Button = styled.button`
 `;
 
 const CloseModal = styled.button`
-  width: 50px;
-  height: 50px;
+  width: 35px;
+  height: 35px;
   background-color: #8c11be;
   border-radius: 50%;
   border: none;
   position: absolute;
-  top: -25px;
-  right: -25px;
+  top: -15px;
+  right: -15px;
   color: #fff;
   font-family: Raleway;
   font-size: 16px;

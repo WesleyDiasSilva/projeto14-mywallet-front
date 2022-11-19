@@ -12,14 +12,16 @@ function HomePage() {
   return (
     <Background>
       <SignInButton onClick={redirectSignIn}>Sign-In</SignInButton>
-      <AppTitle />
-      <DescriptionApp>
-        My wallet is an app for to manage your finance, register revenues and
-        expenses, and also you can have a balance for you to analyze!
-      </DescriptionApp>
-      <ContainerButtons>
-        <GetStarted />
-      </ContainerButtons>
+      <ContainerHome>
+        <AppTitle />
+        <DescriptionApp>
+          My wallet is an app for to manage your finance, register revenues and
+          expenses, and also you can have a balance for you to analyze!
+        </DescriptionApp>
+        <ContainerButtons>
+          <GetStarted />
+        </ContainerButtons>
+      </ContainerHome>
     </Background>
   );
 }
@@ -30,12 +32,19 @@ const Background = styled.div`
   background-color: #8c11be;
   width: 100%;
   height: 100vh;
+  gap: 30px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ContainerHome = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  gap: 30px;
-  position: relative;
+  margin-top: 100px;
 `;
 
 const SignInButton = styled.button`
@@ -71,4 +80,5 @@ const DescriptionApp = styled.span`
 const ContainerButtons = styled.div`
   display: flex;
   gap: 30px;
+  margin-top: 30px;
 `;

@@ -11,6 +11,7 @@ import { UserContext } from "../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 import ModalDelete from "../components/ModalDelete";
 import ModalUpdate from "../components/ModalUpdate";
+import avatarDefatul from "../assets/img/avatardefault.svg";
 
 function MainPage() {
   const [transactions, setTransactions] = React.useState([]);
@@ -18,6 +19,7 @@ function MainPage() {
   const navigate = useNavigate();
   const [modal, setModal] = React.useState(false);
   const [modalUpdate, setModalUpdate] = React.useState(false);
+  const [typeUpdate, setTypeUpdate] = React.useState("");
   const [valueTransactionDelete, setValueTransactionDelete] =
     React.useState("");
   const [valueTransactionUpdate, setValueTransactionUpdate] =
@@ -29,7 +31,7 @@ function MainPage() {
       navigate("/sign-in");
       return;
     }
-    const { token, name } = user;
+    const { token, name, image } = user;
     const promise = axios.get(API + "/transaction", {
       headers: { authorization: token },
     });
@@ -40,7 +42,7 @@ function MainPage() {
 
     promise.catch((err) => console.log(err));
     if (!userContext.name) {
-      userContext.setUser({ name, token });
+      userContext.setUser({ name, token, image });
     }
   }, [modal, modalUpdate]);
 
@@ -61,6 +63,12 @@ function MainPage() {
     navigate("/sign-in");
   }
 
+  function updateImage() {
+    setTypeUpdate("user");
+    setModalUpdate(true);
+    // const promise = `${API}/`
+  }
+
   return (
     <Background>
       {modal && (
@@ -71,6 +79,9 @@ function MainPage() {
       )}
       {modalUpdate && (
         <ModalUpdate
+          user={{ name: userContext.user.name, image: userContext.user.image }}
+          setTypeUpdate={setTypeUpdate}
+          type={typeUpdate}
           transaction={valueTransactionUpdate}
           setModalUpdate={setModalUpdate}
         />
@@ -78,7 +89,15 @@ function MainPage() {
       <Container>
         <Header>
           <NameUser>Hello {userContext.user.name}!</NameUser>
-          <Logout onClick={logoutUser} src={logout} />
+          <ContainerHeaderControls>
+            <Avatar
+              onClick={updateImage}
+              src={
+                userContext.user.image ? userContext.user.image : avatarDefatul
+              }
+            />
+            <Logout onClick={logoutUser} src={logout} />
+          </ContainerHeaderControls>
         </Header>
         <TransactionsContainer type={transactions?.length}>
           {transactions.length > 0
@@ -134,6 +153,19 @@ const Background = styled.div`
   gap: 30px;
 `;
 
+const ContainerHeaderControls = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+`;
+
+const Avatar = styled.img`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+`;
+
 const Container = styled.div`
   width: 90%;
   height: 90%;
@@ -156,7 +188,7 @@ const BalanceContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   background-color: #fff;
-  border-radius: 0px 0px 5px 5px;
+  border-radius: 0px 0px 10px 10px;
   padding: 10px;
   box-sizing: border-box;
 `;
@@ -182,7 +214,7 @@ const Header = styled.header`
   align-items: center;
   width: 100%;
   color: #fff;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 const Logout = styled.img`
@@ -196,7 +228,7 @@ const TransactionsContainer = styled.div`
   width: 100%;
   background-color: #fff;
   overflow-y: scroll;
-  border-radius: 5px 0px 0px 0px;
+  border-radius: 10px 0px 0px 0px;
   display: flex;
   justify-content: ${(props) => (props.type > 0 ? "start" : "center")};
   align-items: center;

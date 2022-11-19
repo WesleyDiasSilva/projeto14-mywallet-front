@@ -24,7 +24,11 @@ function LoginPage() {
       userContext.setUser({ name: res.data.user, token: res.data.token });
       localStorage.setItem(
         "token",
-        JSON.stringify({ token: res.data.token, name: res.data.user })
+        JSON.stringify({
+          token: res.data.token,
+          name: res.data.user,
+          image: res.data.image,
+        })
       );
       setEmail("");
       setPassword("");
@@ -39,7 +43,7 @@ function LoginPage() {
       <ContainerInputs>
         <Input setValue={setEmail} value={email} placeholder="E-mail" />
         <Input
-          type={"password"}
+          typeForm={"password"}
           setValue={setPassword}
           value={password}
           placeholder="Password"

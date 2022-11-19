@@ -13,6 +13,7 @@ function RegisterPage() {
   const [email, setEmail] = React.useState();
   const [password, setPassword] = React.useState();
   const [confirmPassword, setConfirmPassword] = React.useState();
+  const [image, setImage] = React.useState();
 
   const navigate = useNavigate();
 
@@ -22,9 +23,10 @@ function RegisterPage() {
       email,
       password,
       confirmPassword,
+      image,
     });
     promise.then((res) => {
-      console.log(res)
+      console.log(res);
       navigate("/sign-in");
     });
     promise.catch((res) => console.log(res));
@@ -36,14 +38,15 @@ function RegisterPage() {
       <ContainerInputs>
         <Input setValue={setName} value={name} placeholder="Name" />
         <Input setValue={setEmail} value={email} placeholder="E-mail" />
+        <Input value={image} setValue={setImage} placeholder="Image URL" />
         <Input
-          type={"password"}
+          typeForm={"password"}
           setValue={setPassword}
           value={password}
           placeholder="Password"
         />
         <Input
-          type={"password"}
+          typeForm={"password"}
           setValue={setConfirmPassword}
           value={confirmPassword}
           placeholder="Confirm Password"
