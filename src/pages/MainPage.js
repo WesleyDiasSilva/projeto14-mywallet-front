@@ -24,6 +24,7 @@ function MainPage() {
     React.useState("");
   const [valueTransactionUpdate, setValueTransactionUpdate] =
     React.useState("");
+  const [imageCorrection, setImageCorrection] = React.useState(false);
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("token"));
@@ -44,7 +45,7 @@ function MainPage() {
     if (!userContext.name) {
       userContext.setUser({ name, token, image });
     }
-  }, [modal, modalUpdate]);
+  }, [modal, modalUpdate, imageCorrection]);
 
   let balance = 0;
   transactions.forEach((transaction) => {
@@ -69,6 +70,13 @@ function MainPage() {
     // const promise = `${API}/`
   }
 
+  function errorImage() {
+    const user = JSON.parse(localStorage.getItem("token"));
+    user.image = "";
+    localStorage.setItem("token", JSON.stringify(user));
+    setImageCorrection(!imageCorrection);
+  }
+
   return (
     <Background>
       {modal && (
@@ -91,6 +99,7 @@ function MainPage() {
           <NameUser>Hello {userContext.user.name}!</NameUser>
           <ContainerHeaderControls>
             <Avatar
+              onErrorCapture={errorImage}
               onClick={updateImage}
               src={
                 userContext.user.image ? userContext.user.image : avatarDefatul
