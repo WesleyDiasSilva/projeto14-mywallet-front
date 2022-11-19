@@ -55,15 +55,16 @@ const SignInButton = styled.button`
   height: 60px;
   border: none;
   border-radius: 5px;
-  background-color: #000;
-  color: #fff;
+  background-color: #fff;
+  color: #000;
   font-size: 20px;
   font-family: Raleway;
   font-weight: bold;
   cursor: pointer;
   &:hover {
     background-color: #b235e6;
-    transition: 0.5s;
+    transition: 0.3s;
+    color: #fff;
   }
 `;
 
